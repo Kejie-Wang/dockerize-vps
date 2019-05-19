@@ -1,0 +1,9 @@
+version: "2"
+services:
+  gogs:
+    image: "gogs/gogs"
+    ports:
+      - "10080:3000" # web
+      - "10022:22" # ssh
+    volumes:
+      - ../data/gogs:/data
