@@ -3,7 +3,16 @@ services:
   gogs:
     image: "gogs/gogs"
     ports:
-      - "10080:3000" # web
+      - "127.0.0.1:10080:3000" # web
       - "10022:22" # ssh
     volumes:
       - ../data/gogs:/data
+    environment:
+      VIRTUAL_HOST: "git.wangkejie.me"
+      VIRTUAL_PORT: 3000
+    container_name: "gogs"
+    restart: always
+networks:
+  default:
+    external:
+      name: nginx_nginx-proxy

@@ -1,6 +1,6 @@
 #!/bin/bash
 
-DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )/.." && pwd )"
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
 function install_docker() {
   # remove older version docker.
@@ -31,9 +31,26 @@ function install_docker_compose() {
   sudo chmod +x /usr/local/bin/docker-compose
 }
 
+function install_nginx() {
+  docker-compose -f $DIR/nginx/docker-compose.yml up -d
+}
+
 function install_gogs() {
   mkdir -p $DIR/data/gogs
-  docker-compose -f git-server/docker-compose.yml up -d
+  docker-compose -f $DIR/git-server/docker-compose.yml up -d
+}
+
+function usage_help() {
+  RED='\033[0;31m'
+  BLUE='\033[0;34m'
+  BOLD='\033[1m'
+  NONE='\033[0m'
+
+  echo -e "\n${RED}Options${NONE}:
+  ${BLUE}docker${NONE}: install docker and docker-compose 
+  ${BLUE}nginx${NONE}: install nginx 
+  ${BLUE}gogs${NONE}: install gogs (a lightweight git server)
+  "
 }
 
 function main() {
@@ -43,8 +60,15 @@ function main() {
       install_docker
       install_docker_compose
       ;;
+    nginx)
+      install_nginx
+      ;;
     gogs)
+      install_nginx
       install_gogs
+      ;;
+    *)
+      usage_help
       ;;
     esac
 }
